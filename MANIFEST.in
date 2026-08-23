@@ -1,4 +1,4 @@
 include LICENSE
 include README.md
 include SECURITY.md
-recursive-include au_tax_change_impact_monitor/samples *.json
+recursive-include tax_radar_au/samples *.json

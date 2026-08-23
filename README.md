@@ -4,7 +4,7 @@
 
 A **provenance-first change-review queue**, not a tax-answering system or an automatic skill updater.
 
-> Compatibility: the Python distribution, import package, CLI command, wheel names and existing releases remain `au-tax-change-impact-monitor` / `au_tax_change_impact_monitor`.
+> Compatibility: from v0.1.2 the Python distribution, import package and CLI command are `tax-radar-au` / `tax_radar_au`, matching the repository. Releases v0.1.0 and v0.1.1 shipped wheels named `au_tax_change_impact_monitor-*`; those assets and their attestations are unchanged.
 
 The first version compares fabricated source-index metadata with a fabricated Register-observation contract. It keeps important states distinct (`SUPERSEDED`, `CURRENT_NO_PUBLISHED_COMPILATION`, `NO_LONGER_IN_FORCE`, and `LOOKUP_FAILED`), then maps only exact register ID + collection pairs to a potential workflow-review question.
 
@@ -26,14 +26,14 @@ Synthetic source index + synthetic Register observation + exact source-to-skill 
 ```bash
 python -m pip install -e ".[dev]"
 
-au-tax-change-impact-monitor compare \
-  --baseline au_tax_change_impact_monitor/samples/baseline/sample-sources.json \
-  --observation au_tax_change_impact_monitor/samples/observations/sample-register-observation.json \
-  --map au_tax_change_impact_monitor/samples/mappings/sample-source-skill-map.json \
+tax-radar-au compare \
+  --baseline tax_radar_au/samples/baseline/sample-sources.json \
+  --observation tax_radar_au/samples/observations/sample-register-observation.json \
+  --map tax_radar_au/samples/mappings/sample-source-skill-map.json \
   --out build/demo
 ```
 
-The sample fixtures ship inside the package, so a plain `pip install` can run the same demo from any directory; `python -c "from au_tax_change_impact_monitor.util import sample_path; print(sample_path())"` prints their installed location. Every input option accepts any readable path, and `--out` is created relative to the current directory.
+The sample fixtures ship inside the package, so a plain `pip install` can run the same demo from any directory; `python -c "from tax_radar_au.util import sample_path; print(sample_path())"` prints their installed location. Every input option accepts any readable path, and `--out` is created relative to the current directory.
 
 The example creates one `SUPERSEDED` source item mapped to a BAS-review question. It deliberately does not infer the legal effect of the change, update a skill, or send a notification.
 
@@ -49,14 +49,14 @@ An item is `OPEN` when it needs human technical review, carrying `change_kind` `
 | `CURRENT_NO_PUBLISHED_COMPILATION` | The title is current but has no published compilation to compare. |
 | `BASELINE_NOT_CURRENT` | The baseline row is itself marked `version_is_current: false`, so it is a stale index entry and cannot support a currency conclusion. |
 
-`compare` exits 0 for `REVIEW_REQUIRED` and `NO_CHANGE_DETECTED`, and 2 when the run status is `BLOCKED`. Rejected input also exits 2, in one of two shapes: a malformed command line is rejected by argparse, which prints its own usage block, and everything the monitor itself rejects prints a single `au-tax-change-impact-monitor: blocked: ...` line on stderr.
+`compare` exits 0 for `REVIEW_REQUIRED` and `NO_CHANGE_DETECTED`, and 2 when the run status is `BLOCKED`. Rejected input also exits 2, in one of two shapes: a malformed command line is rejected by argparse, which prints its own usage block, and everything the monitor itself rejects prints a single `tax-radar-au: blocked: ...` line on stderr.
 
-If stdout cannot encode a character in the `--out` path (a redirected stream on Windows uses the ANSI code page, not UTF-8), that one line is printed backslash-escaped and a `au-tax-change-impact-monitor: note: ...` line on stderr says so. The exit status still reflects the run, and the files on disk carry the real path.
+If stdout cannot encode a character in the `--out` path (a redirected stream on Windows uses the ANSI code page, not UTF-8), that one line is printed backslash-escaped and a `tax-radar-au: note: ...` line on stderr says so. The exit status still reflects the run, and the files on disk carry the real path.
 
-If stdout cannot be written at all (a reader that closed the pipe, or a redirect to a handle this process cannot write to), the summary is dropped, a `au-tax-change-impact-monitor: note: ...` line on stderr says so, and the exit status is still the one the run decided. A redirected stdout is buffered, so that failure otherwise surfaces only when the interpreter flushes on the way out, where it is reported as `Exception ignored ...` and exits 120 on a run whose queue files are complete. The CLI closes stdout instead, which is what keeps the exit status the run's own.
+If stdout cannot be written at all (a reader that closed the pipe, or a redirect to a handle this process cannot write to), the summary is dropped, a `tax-radar-au: note: ...` line on stderr says so, and the exit status is still the one the run decided. A redirected stdout is buffered, so that failure otherwise surfaces only when the interpreter flushes on the way out, where it is reported as `Exception ignored ...` and exits 120 on a run whose queue files are complete. The CLI closes stdout instead, which is what keeps the exit status the run's own.
 
 ```bash
-au-tax-change-impact-monitor validate-review \
+tax-radar-au validate-review \
   --queue build/demo/impact-queue.json \
   --decision path/to/a-human-technical-review.json
 ```

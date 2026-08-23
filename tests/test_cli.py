@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pytest
 
-from au_tax_change_impact_monitor.cli import main
-from au_tax_change_impact_monitor.util import sample_path
+from tax_radar_au.cli import main
+from tax_radar_au.util import sample_path
 
 
 def _compare_argv(out: Path) -> list[str]:
@@ -180,7 +180,7 @@ def test_a_stdout_that_fails_only_at_the_shutdown_flush_keeps_the_exit_status(tm
 
     with read_only.open("rb") as handle:
         done = subprocess.run(
-            [sys.executable, "-m", "au_tax_change_impact_monitor", *_compare_argv(output)],
+            [sys.executable, "-m", "tax_radar_au", *_compare_argv(output)],
             stdout=handle,
             stderr=subprocess.PIPE,
         )

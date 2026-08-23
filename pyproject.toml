@@ -3,7 +3,7 @@ requires = ["setuptools==84.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "au-tax-change-impact-monitor"
+name = "tax-radar-au"
 version = "0.1.1"
 description = "A provenance-first synthetic change-review queue for Australian tax workflow sources"
 readme = "README.md"
@@ -27,14 +27,14 @@ dev = [
     "ruff>=0.11", "mypy>=1.14","build>=1.2", "pytest>=8"]
 
 [project.scripts]
-au-tax-change-impact-monitor = "au_tax_change_impact_monitor.cli:main"
+tax-radar-au = "tax_radar_au.cli:main"
 
 [tool.setuptools]
-packages = ["au_tax_change_impact_monitor"]
+packages = ["tax_radar_au"]
 include-package-data = false
 
 [tool.setuptools.package-data]
-au_tax_change_impact_monitor = ["samples/*/*.json", "py.typed"]
+tax_radar_au = ["samples/*/*.json", "py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -42,7 +42,7 @@ addopts = "-q"
 
 [tool.ruff]
 line-length = 100
-src = ["au_tax_change_impact_monitor", "tests"]
+src = ["tax_radar_au", "tests"]
 
 [tool.ruff.lint]
 # First-enablement set: syntax and undefined-name errors only (E9, F82).
@@ -51,7 +51,7 @@ select = ["E9", "F82"]
 
 [tool.mypy]
 python_version = "3.10"
-packages = ["au_tax_change_impact_monitor"]
+packages = ["tax_radar_au"]
 ignore_missing_imports = true
 pretty = true
 

@@ -31,4 +31,6 @@ gh release verify v0.1.1 -R ryanduguid/tax-radar-au
 gh release verify-asset v0.1.1 au_tax_change_impact_monitor-0.1.1-py3-none-any.whl -R ryanduguid/tax-radar-au
 ```
 
+The asset names above are v0.1.1's. From v0.1.2 the wheel and source distribution carry the `tax_radar_au-` stem, so substitute it when verifying a later release.
+
 If any gate fails, inspect it before touching the tag or draft. Never move a published tag.

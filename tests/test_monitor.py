@@ -8,10 +8,10 @@ from pathlib import Path
 
 import pytest
 
-import au_tax_change_impact_monitor.monitor as monitor_module
-from au_tax_change_impact_monitor.errors import MonitorError
-from au_tax_change_impact_monitor.monitor import _https_url, _iso_date, _iso_timestamp, _load_observation, compare, render_markdown, validate_review, write_queue
-from au_tax_change_impact_monitor.util import SourceSnapshot, sample_path, sha256_json
+import tax_radar_au.monitor as monitor_module
+from tax_radar_au.errors import MonitorError
+from tax_radar_au.monitor import _https_url, _iso_date, _iso_timestamp, _load_observation, compare, render_markdown, validate_review, write_queue
+from tax_radar_au.util import SourceSnapshot, sample_path, sha256_json
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1603,7 +1603,7 @@ def test_v01_package_has_no_network_client_import() -> None:
     }
     allowed_urllib = {"urllib.parse"}
 
-    for path in sorted((ROOT / "au_tax_change_impact_monitor").glob("*.py")):
+    for path in sorted((ROOT / "tax_radar_au").glob("*.py")):
         tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
@@ -1629,7 +1629,7 @@ def test_v01_package_has_no_network_client_import() -> None:
 
     # Second net: dynamic import by name would sidestep the walk above.
     source = "\n".join(
-        path.read_text(encoding="utf-8") for path in (ROOT / "au_tax_change_impact_monitor").glob("*.py")
+        path.read_text(encoding="utf-8") for path in (ROOT / "tax_radar_au").glob("*.py")
     )
     for forbidden in ("__import__", "import_module"):
         assert forbidden not in source

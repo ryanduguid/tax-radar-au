@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/au-tax-change-impact-monitor
+      url: https://pypi.org/p/tax-radar-au
     permissions:
       id-token: write # Obtain the OIDC identity that PyPI trusted publishing verifies.
     steps:

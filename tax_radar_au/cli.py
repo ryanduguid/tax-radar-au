@@ -25,7 +25,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def _blocked(message: str) -> int:
-    print(f"au-tax-change-impact-monitor: blocked: {message}", file=sys.stderr)
+    print(f"tax-radar-au: blocked: {message}", file=sys.stderr)
     return 2
 
 
@@ -49,7 +49,7 @@ def _say(line: str) -> None:
         encoding = getattr(sys.stdout, "encoding", None) or "ascii"
         print(line.encode(encoding, "backslashreplace").decode(encoding))
         print(
-            f"au-tax-change-impact-monitor: note: the line above is backslash-escaped because "
+            f"tax-radar-au: note: the line above is backslash-escaped because "
             f"stdout encoding {encoding} cannot represent it; read the path from the filesystem, not from stdout.",
             file=sys.stderr,
         )
@@ -77,7 +77,7 @@ def _abandon_stdout(exc: OSError) -> None:
         pass
     try:
         print(
-            f"au-tax-change-impact-monitor: note: the run summary could not be written to stdout ({exc}); "
+            f"tax-radar-au: note: the run summary could not be written to stdout ({exc}); "
             f"the exit status still reflects the run and the files on disk are complete.",
             file=sys.stderr,
         )
@@ -125,7 +125,7 @@ def main(argv: list[str] | None = None) -> int:
                 paths = write_queue(queue, args.out)
             except OSError as exc:
                 return _blocked(f"the output directory could not be written: {exc}")
-            summary = [f"au-tax-change-impact-monitor: {queue['run_status']}; {len(queue['items'])} item(s)"]
+            summary = [f"tax-radar-au: {queue['run_status']}; {len(queue['items'])} item(s)"]
             summary += [f"  {name}: {path}" for name, path in paths.items()]
             return _report(summary, 0 if queue["run_status"] != "BLOCKED" else 2)
         validation = validate_review(queue_path=args.queue, decision_path=args.decision)
@@ -135,7 +135,7 @@ def main(argv: list[str] | None = None) -> int:
                 args.out.write_text(json.dumps(validation, indent=2, sort_keys=True) + "\n", encoding="utf-8")
             except OSError as exc:
                 return _blocked(f"the validation output file could not be written: {exc}")
-        return _report([f"au-tax-change-impact-monitor: {validation['status']}; {validation['decision_count']} decision(s)"], 0)
+        return _report([f"tax-radar-au: {validation['status']}; {validation['decision_count']} decision(s)"], 0)
     except MonitorError as exc:
         return _blocked(str(exc))
 

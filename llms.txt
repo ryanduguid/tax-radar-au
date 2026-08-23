@@ -1,9 +1,9 @@
 # Tax Radar AU
-> High-density context for LLM agents. Synthetic review-queue demo — not a live tax monitor.
+> High-density context for LLM agents. Synthetic review-queue demo, not a live tax monitor.
 
 ## Package Overview
 - **Repository**: https://github.com/ryanduguid/tax-radar-au
-- **Compatibility**: The Python distribution, import package, CLI command, wheel names and existing releases remain `au-tax-change-impact-monitor` / `au_tax_change_impact_monitor`.
+- **Compatibility**: From v0.1.2 the Python distribution, import package and CLI command are `tax-radar-au` / `tax_radar_au`, matching the repository. Releases v0.1.0 and v0.1.1 shipped wheels named `au_tax_change_impact_monitor-*`; those assets and their attestations are unchanged.
 - **Domain**: Synthetic, provenance-first review-queue demonstration for supplied Commonwealth tax-source metadata.
 - **Reference Scope**: Metadata identifiers may refer to Commonwealth tax legislation, ATO public rulings, and related instruments; the package does not read or store source text.
 

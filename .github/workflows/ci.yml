@@ -59,15 +59,15 @@ jobs:
           python -m venv /tmp/venv
           # --no-index, or pip is free to resolve the name from PyPI and
           # test a release nobody built in this job.
-          /tmp/venv/bin/pip install --no-index --find-links dist au-tax-change-impact-monitor
+          /tmp/venv/bin/pip install --no-index --find-links dist tax-radar-au
           cd /tmp
-          resolve() { /tmp/venv/bin/python -c "from au_tax_change_impact_monitor.util import sample_path; print(sample_path('$1', '$2'))"; }
-          /tmp/venv/bin/au-tax-change-impact-monitor compare \
+          resolve() { /tmp/venv/bin/python -c "from tax_radar_au.util import sample_path; print(sample_path('$1', '$2'))"; }
+          /tmp/venv/bin/tax-radar-au compare \
             --baseline "$(resolve baseline sample-sources.json)" \
             --observation "$(resolve observations sample-register-observation.json)" \
             --map "$(resolve mappings sample-source-skill-map.json)" \
             --out demo
-          /tmp/venv/bin/au-tax-change-impact-monitor validate-review \
+          /tmp/venv/bin/tax-radar-au validate-review \
             --queue demo/impact-queue.json \
             --decision "$(resolve decisions sample-technical-review.json)" \
             --out demo/validation.json
@@ -85,6 +85,6 @@ jobs:
           python-version: "3.12"
       - name: install the locked toolchain
         run: python -m pip install "uv==0.12.0"
-      - run: uv run --locked --extra dev ruff check au_tax_change_impact_monitor tests
-      - run: uv run --locked --extra dev mypy au_tax_change_impact_monitor
+      - run: uv run --locked --extra dev ruff check tax_radar_au tests
+      - run: uv run --locked --extra dev mypy tax_radar_au
         continue-on-error: true
