@@ -4,12 +4,24 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: >-
+          Existing tag whose GitHub Release already has built assets, to
+          backfill a PyPI publish that failed after the release published
+          (e.g. release-policy's workflow_call outputs bug, fixed in
+          ryanduguid/release-policy#11, before which the release job
+          succeeded but the pypi job always got an empty artifact name).
+        required: true
+        type: string
 
 permissions:
   contents: read
 
 jobs:
   release:
+    if: github.event_name == 'push'
     permissions:
       attestations: write # Record provenance and SBOM attestations for release assets.
       contents: write # Create the draft release, upload assets and publish it.
@@ -18,6 +30,7 @@ jobs:
     with:
       upload-dist-artifact: true
   pypi:
+    if: github.event_name == 'push'
     timeout-minutes: 15
     name: publish to PyPI
     needs: release
@@ -33,6 +46,42 @@ jobs:
         with:
           name: dist-${{ needs.release.outputs.stem }}-${{ needs.release.outputs.version }}
           path: dist
+
+      - name: Require exactly one wheel and one source distribution
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(find dist -name '*.whl' | wc -l)" = "1"
+          test "$(find dist -name '*.tar.gz' | wc -l)" = "1"
+          ls -l dist
+
+      - name: Publish to PyPI via trusted publishing
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+
+  pypi-backfill:
+    if: github.event_name == 'workflow_dispatch'
+    timeout-minutes: 15
+    name: publish an existing release to PyPI
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/au-tax-change-impact-monitor
+    permissions:
+      contents: read
+      id-token: write # Obtain the OIDC identity that PyPI trusted publishing verifies.
+    steps:
+      - name: Download the existing release's attested assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release download "${{ inputs.tag }}" \
+            --repo "${{ github.repository }}" \
+            --dir dist \
+            --pattern '*.whl' --pattern '*.tar.gz' --pattern 'SHA256SUMS'
+          (cd dist && sha256sum --check --ignore-missing SHA256SUMS)
+          rm dist/SHA256SUMS
 
       - name: Require exactly one wheel and one source distribution
         shell: bash
