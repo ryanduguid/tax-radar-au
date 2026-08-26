@@ -26,7 +26,7 @@ jobs:
       attestations: write # Record provenance and SBOM attestations for release assets.
       contents: write # Create the draft release, upload assets and publish it.
       id-token: write # Obtain the OIDC identity required to sign attestations.
-    uses: ryanduguid/release-policy/.github/workflows/release-python.yml@3b8a377207cab2c7c808fcc96b66578f4695beea # release-python.yml's on.workflow_call never re-exposed job outputs; caller PyPI publish silently failed until #11
+    uses: ryanduguid/release-policy/.github/workflows/release-python.yml@f180faa567e95669224211d0282b3b437fe79ea9 # release-python.yml's on.workflow_call never re-exposed job outputs; caller PyPI publish silently failed until #11
     with:
       upload-dist-artifact: true
   pypi:
