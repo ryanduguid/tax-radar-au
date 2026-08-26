@@ -1,5 +1,7 @@
 # Tax Radar AU
 
+> **Archived and superseded:** the maintained `tax_radar_au` change-review queue now lives in [au-tax-legislation-corpus](https://github.com/ryanduguid/au-tax-legislation-corpus/blob/main/RADAR.md); this repository remains only for its historical v0.1.x releases and tags.
+
 [![tests](https://github.com/ryanduguid/tax-radar-au/actions/workflows/ci.yml/badge.svg)](https://github.com/ryanduguid/tax-radar-au/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-4F485E.svg?labelColor=04001F)](LICENSE) [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-5C2D91.svg?logo=python&logoColor=white&labelColor=04001F)](https://www.python.org/downloads/)
 
 A **provenance-first change-review queue**, not a tax-answering system or an automatic skill updater.
